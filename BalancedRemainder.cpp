@@ -141,38 +141,43 @@ struct MaxsgTree{
 	
 	
 };
-ll greatestIndex(vector<ll> A,ll start,ll end){
-		ll m=-1;
-		ll v=0;
-		for(int i=start;i<=end;i++){
-			if(m<A[i]){
-				m=A[i];
-				v=i;
-			}
-		}
-		return v;
-}
-void DAC(vector<ll> A,ll l,ll r,ll& t,vector<ll>& depth){
-		if(l>r)
-			return;
-		ll indx=greatestIndex(A,l,r);
-		depth[indx]=t;
-		++t;
-		DAC(A,l,indx-1,t++,depth);
-		DAC(A,l,indx+1,t,depth);
-		
-}
-
 
 void test_case(){
 	ll n;
 	cin>>n;
+	assert(n%3==0);
+	ll k=n/3;
 	vector<ll> A(n);
-	vector<ll> depth(n,0);
-	for(int i=0;i<n;i++) cin>>A[i];
-	ll t=0;
-	DAC(A,0,n-1,t,vector<ll> depth);
-	
+	map<ll,ll> M;
+	for(int i=0;i<n;i++){ cin>>A[i];M[A[i]%3]++}
+	ll m=0;
+	ll v=-1;
+	ll cnt=0;
+	for(auto x:M){
+		if(m<x.second){
+			m=x.second;
+			v=x.first;
+		}
+	}
+	if(M[v]==k){
+		if(M[(v+1)%3]>=k){
+			cnt+=abs(M[(v+2)%3]-k);
+		}
+		else{
+			cnt+=2*abs(M[(v+1)%3]-k);
+		}
+	}
+	else{
+		M[(v+1)%3]+=abs(M[v]-k);
+		if(M[(v+1)%3]>=k){
+			cnt+=abs(M[(v+2)%3]-k);
+		}
+		else{
+			cnt+=2*abs(M[(v+1)%3]-k);
+		}
+		
+	}
+	cout<<cnt<<"\n";
 		
 	
 	
